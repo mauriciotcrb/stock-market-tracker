@@ -69,9 +69,17 @@ function updateCharts(timeSeries) {
   const ctxPrice = document.getElementById("stockChart").getContext("2d");
   const ctxVolume = document.getElementById("volumeChart").getContext("2d");
 
-  const timestamps = data.t.map(t => new Date(t * 1000).toLocaleDateString());
-  const prices = data.c;
-  const volumes = data.v;
+  if (!ctxPrice || !ctxVolume) {
+    console.error("Canvas elements not found!");
+  }
+
+  const timestamps = data.t ? data.t.map(t => new Date(t * 1000).toLocaleDateString()) : [];
+  const prices = data.c || [];
+  const volumes = data.v || [];
+
+  if (!timestamps.length || !prices.length) {
+    console.error("Missing historical stock data!");
+  }
 
   if (stockChart) stockChart.destroy();
   if (volumeChart) volumeChart.destroy();
@@ -121,14 +129,29 @@ function updateCharts(timeSeries) {
 }
 
 async function fetchStockNews(symbol) {
-  const url = `https://finnhub.io/api/v1/company-news?symbol=${symbol}&from=2024-03-01&to=2024-03-10&token=${apiKey}`;
+  const today = new Date();
+  const lastWeek = new Date();
+  lastWeek.setDate(today.getDate() - 7);
 
+  const fromDate = lastWeek.toISOString().split("T")[0];
+  const toDate = today.toISOString().split("T")[0];
+
+  const url = `https://finnhub.io/api/v1/company-news?symbol=${symbol}&from=2024-03-01&to=2024-03-10&token=${apiKey}`;
+  
   try {
     const response = await fetch(url);
     const data = await response.json();
+
+    if (!data || data.length === 0) {
+      console.warn("No news found for this stock.");
+      document.getElementById("newsSection").innerHTML = `<p>No recent news found for ${symbol}.</p>`;
+      return;
+    }
+
     displayStockNews(data);
   } catch {
     console.error("Error fetching stock news:", error);
+    document.getElementById("newsSection").innerHTML = `<p>Error fetching news.</p>`;
   }
 }
 
