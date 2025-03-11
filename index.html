@@ -5,9 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <link rel="stylesheet" href="style.css">
-  <script src="script.js" defer></script>
 </head>
 <body>
-  
+  <div class="container">
+    <h1>Stock Market Tracker</h1>
+
+    <!-- Search bar for entering stock symbol -->
+    <input type="text" id="stockSymbol" placeholder="Enter stock symbol (e.g., AAPL)">
+    <button id="searchBtn">Search</button>
+
+    <!-- Stock info to be displayed -->
+    <div id="stockInfo"></div>
+
+    <!-- Stock price chart -->
+    <canvas id="stockChart"></canvas>
+  </div>
+
+  <!-- Include Chart.js for data visualization -->
+  <script src="ttps://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="script.js" defer></script>
 </body>
 </html>
