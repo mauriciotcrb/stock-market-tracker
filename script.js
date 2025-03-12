@@ -1,76 +1,73 @@
 let stockChart, volumeChart;
+const apiKey = "cv883ohr01qqdqh4dpbgcv883ohr01qqdqh4dpc0"; // Replace with your Finnhub API Key
 
 // Function to fetch real-time stock price
 async function fetchStockData(symbol) {
-    const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1d&range=1mo`;
+    const url = `https://finnhub.io/api/v1/quote?symbol=${symbol}&token=${apiKey}`;
 
     try {
         const response = await fetch(url);
         const data = await response.json();
 
-        if (!data.chart || !data.chart.result) {
+        if (!data || data.c === undefined) {
             console.error("Error fetching stock data:", data);
             return;
         }
 
-        displayStockData(data.chart.result[0], symbol);
+        displayStockData(data, symbol);
     } catch (error) {
         console.error("Error fetching stock data:", error);
     }
 }
 
-// Function to display the stock's real-time price
+// Function to display real-time stock price
 function displayStockData(data, symbol) {
     const stockInfo = document.getElementById("stockInfo");
-
-    if (!data || !data.indicators || !data.indicators.quote) {
-        stockInfo.innerHTML = `<p>Error fetching data. Please check the stock symbol.</p>`;
-        return;
-    }
-
-    const latest = data.indicators.quote[0];
-    const lastClose = latest.close[latest.close.length - 1];
-
+    
     stockInfo.innerHTML = `
         <h2>${symbol}</h2>
-        <p><strong>Current Price:</strong> $${lastClose.toFixed(2)}</p>
+        <p><strong>Current Price:</strong> $${data.c.toFixed(2)}</p>
+        <p><strong>Open:</strong> $${data.o.toFixed(2)}</p>
+        <p><strong>High:</strong> $${data.h.toFixed(2)}</p>
+        <p><strong>Low:</strong> $${data.l.toFixed(2)}</p>
+        <p><strong>Previous Close:</strong> $${data.pc.toFixed(2)}</p>
     `;
-
-    updateCharts(data, symbol);
 }
 
-// Function to fetch historical stock prices and volume
+// Function to fetch historical stock data (last 7 days)
 async function fetchHistoricalData(symbol) {
-    const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1d&range=1mo`;
+    const today = Math.floor(Date.now() / 1000);
+    const lastWeek = today - 7 * 24 * 60 * 60;
+    const url = `https://finnhub.io/api/v1/stock/candle?symbol=${symbol}&resolution=D&from=${lastWeek}&to=${today}&token=${apiKey}`;
 
     try {
         const response = await fetch(url);
         const data = await response.json();
 
-        if (!data.chart || !data.chart.result) {
+        if (data.s !== "ok") {
             console.error("Error fetching historical data:", data);
             return;
         }
 
-        updateCharts(data.chart.result[0], symbol);
+        updateCharts(data, symbol);
     } catch (error) {
         console.error("Error fetching historical stock data:", error);
     }
 }
 
-// Function to update the stock price and volume charts
+// Function to update price and volume charts
 function updateCharts(data, symbol) {
     const ctxPrice = document.getElementById("stockChart").getContext("2d");
     const ctxVolume = document.getElementById("volumeChart").getContext("2d");
 
-    if (!data.timestamp || !data.indicators || !data.indicators.quote) {
+    if (!data.t || !data.c || !data.v) {
         console.error("Missing historical stock data!");
         return;
     }
 
-    const timestamps = data.timestamp.map(t => new Date(t * 1000).toLocaleDateString());
-    const prices = data.indicators.quote[0].close;
-    const volumes = data.indicators.quote[0].volume;
+    const timestamps = data.t.map(t => new Date(t * 1000).toLocaleDateString());
+    const prices = data.c;
+    const volumes = data.v;
 
     if (stockChart) stockChart.destroy();
     if (volumeChart) volumeChart.destroy();
@@ -121,21 +118,21 @@ function updateCharts(data, symbol) {
     console.log("Charts updated successfully!");
 }
 
-// Function to fetch latest stock news from Yahoo Finance
+// Function to fetch stock news from Finnhub
 async function fetchStockNews(symbol) {
-    const url = `https://query1.finance.yahoo.com/v1/finance/search?q=${symbol}`;
+    const url = `https://finnhub.io/api/v1/company-news?symbol=${symbol}&from=2024-03-01&to=2024-03-10&token=${apiKey}`;
 
     try {
         const response = await fetch(url);
         const data = await response.json();
 
-        if (!data.news || data.news.length === 0) {
+        if (!data || data.length === 0) {
             console.warn("No news found for this stock.");
             document.getElementById("newsSection").innerHTML = `<p>No recent news found for ${symbol}.</p>`;
             return;
         }
 
-        displayStockNews(data.news);
+        displayStockNews(data);
     } catch (error) {
         console.error("Error fetching stock news:", error);
         document.getElementById("newsSection").innerHTML = `<p>Error fetching news.</p>`;
@@ -150,9 +147,9 @@ function displayStockNews(news) {
     news.slice(0, 5).forEach(article => {
         const newsItem = document.createElement("div");
         newsItem.innerHTML = `
-            <p><strong>${article.title}</strong></p>
-            <p>${article.publisher}</p>
-            <a href="${article.link}" target="_blank">Read more</a>
+            <p><strong>${article.headline}</strong></p>
+            <p>${article.summary}</p>
+            <a href="${article.url}" target="_blank">Read more</a>
             <hr>
         `;
         newsSection.appendChild(newsItem);
