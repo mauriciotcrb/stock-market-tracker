@@ -3,30 +3,148 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Stock Market Tracker</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Stock Market Tracker</h1>
+  <h1 class="title">Stock Market Tracker</h1>
 
-    <!-- Search bar for entering stock symbol -->
-    <input type="text" id="stockSymbol" placeholder="Enter stock symbol (e.g., AAPL)">
-    <button id="searchBtn">Search</button>
+  <!-- Search bar for entering stock symbol -->
+  <div class="search-container">
+    <div class="row">
+      <input type="text" id="stockSymbol" placeholder="Enter stock symbol..." autocomplete="off">
+      <button id="searchBtn">Search</button>
+    </div>
+    
+  </div>
 
-    <!-- Stock info to be displayed -->
-    <div id="stockInfo"></div>
+  <div class="layout">
+    <div class="container" id="stockDisplayed">
+      
+      <!-- <div id="autocompleteResults" class="autocomplete-box"></div> -->
+  
+      <!-- Stock Name Display (Updated Dynamically) -->
+      <h3 id="stockName">Dow Jones Industrial Average</h3>
+  
+      <!-- Stock info to be displayed -->
+      <div id="stockInfo"></div>
+  
+      <!-- Stock price chart -->
+      <canvas id="stockChart"></canvas>
+  
+      <!-- Trading Volume Chart -->
+      <h2>Trading Volume</h2>
+      <canvas id="volumeChart"></canvas>
+    </div>
+  
+    <div class="container" id="otherStocks">
+      <!-- Default stocks display-->
+      <h2>Major US Indices</h2>
+      <div class="market-list">
+        <div class="market-card" data-symbol="DJIA">
+          <div class="market-name">
+            <div class="stock-id">DJIA</div>
+            <div class="stock-name">Dow Jones Industrial Average</div>
+          </div>
+          <div class="market-price" id="djia-price">Loading...</div>
+          <div class="market-change" id="djia-change">
+            <div class="change-percentage">Loading...</div>
+            <div class="change-amount">Loading...</div>
+          </div>
+        </div>
 
-    <!-- Stock price chart -->
-    <canvas id="stockChart"></canvas>
+        <div class="market-card" data-symbol="IXIC">
+          <div class="market-name">
+            <div class="stock-id">COMP</div>
+            <div class="stock-name">NASDAQ Composite Index</div>
+          </div>
+          <div class="market-price" id="nasdaq-price">Loading...</div>
+          <div class="market-change" id="nasdaq-change">
+            <div class="change-percentage">Loading...</div>
+            <div class="change-amount">Loading...</div>
+          </div>
+        </div>
 
-    <!-- Trading Volume Chart -->
-    <h2>Trading Volume</h2>
-    <canvas id="volumeChart"></canvas>
+        <div class="market-card" data-symbol="GSPC">
+          <div class="market-name">
+            <div class="stock-id">SPX</div>
+            <div class="stock-name">S&P 500 Index</div>
+          </div>
+          <div class="market-price" id="sp500-price">Loading...</div>
+          <div class="market-change" id="sp500-change">
+            <div class="change-percentage">Loading...</div>
+            <div class="change-amount">Loading...</div>
+          </div>
+        </div>
 
-    <!-- Stock News Section -->
-    <h2>Latest News</h2>
-    <div id="newsSection"></div>
+        <div class="market-card" data-symbol="RUT">
+          <div class="market-name">
+            <div class="stock-id">RUT</div>
+            <div class="stock-name">Russell 2000</div>
+          </div>
+          <div class="market-price" id="rut-price">Loading...</div>
+          <div class="market-change" id="rut-change">
+            <div class="change-percentage">Loading...</div>
+            <div class="change-amount">Loading...</div>
+          </div>
+        </div>
+
+        <div class="market-card" data-symbol="VIX">
+          <div class="market-name">
+            <div class="stock-id">VIX</div>
+            <div class="stock-name">CBOE Volatility Index</div>
+          </div>
+          <div class="market-price" id="vix-price">Loading...</div>
+          <div class="market-change" id="vix-change">
+            <div class="change-percentage">Loading...</div>
+            <div class="change-amount">Loading...</div>
+          </div>
+        </div>
+      </div>
+
+      <h2>International Indices</h2>
+      <div class="market-list">
+        <div class="market-card" data-symbol="FTSE">
+          <div class="market-name">
+            <div class="stock-id">FTSE</div>
+            <div class="stock-name">FTSE 100</div>
+          </div>
+          <div class="market-price" id="ftse-price">Loading...</div>
+          <div class="market-change" id="ftse-change">
+            <div class="change-percentage">Loading...</div>
+            <div class="change-amount">Loading...</div>
+          </div>
+        </div>
+
+        <div class="market-card" data-symbol="DAX">
+          <div class="market-name">
+            <div class="stock-id">DAX</div>
+            <div class="stock-name">DAX 40</div>
+          </div>
+          <div class="market-price" id="dax-price">Loading...</div>
+          <div class="market-change" id="dax-change">
+            <div class="change-percentage">Loading...</div>
+            <div class="change-amount">Loading...</div>
+          </div>
+        </div>
+
+        <div class="market-card" data-symbol="NIKKEI">
+          <div class="market-name">
+            <div class="stock-id">NIKKEI</div>
+            <div class="stock-name">Nikkei 225</div>
+          </div>
+          <div class="market-price" id="nikkei-price">Loading...</div>
+          <div class="market-change" id="nikkei-change">
+            <div class="change-percentage">Loading...</div>
+            <div class="change-amount">Loading...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stock News Section -->
+      <h2>Latest News</h2>
+      <div id="newsSection"></div>
+    </div>
   </div>
 
   <!-- Include Chart.js for data visualization -->

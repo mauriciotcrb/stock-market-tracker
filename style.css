@@ -1,8 +1,27 @@
+.title {
+  background: rgb(83, 83, 83);
+  color: white;
+  padding: 20px;
+  margin-top: 0px;
+  text-align: center;
+}
+
 body {
   font-family: Arial, Helvetica, sans-serif;
-  background: #f4f4f4;
+  background: #c2d3c7;
   text-align: center;
+  padding: 0px;
+  margin: 0px;
+}
+
+.layout {
+  width: 100%;
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: flex-start;
   padding: 20px;
+  flex-wrap: wrap;
 }
 
 .container {
@@ -10,8 +29,19 @@ body {
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
-  max-width: 500px;
+  min-width: 300px;
+  width: 45%;
   margin: auto;
+}
+#stockDisplayed {
+  flex-grow: 1;
+  padding: 20px;
+  text-align: center;
+}
+#otherStocks {
+  width: 350px;
+  padding: 20px;
+  text-align: center;
 }
 
 input {
@@ -36,4 +66,102 @@ button:hover {
 #stockInfo {
   margin-top: 20px;
   font-size: 18px;
+}
+
+/* Ensure Autocomplete Box is Visible */
+.search-container {
+  position: relative; /* Ensures dropdown is positioned properly */
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 300px;
+  margin: auto;
+  padding: 20px;
+  overflow: visible;
+}
+
+/* Autocomplete Dropdown */
+.autocomplete-box {
+  position: absolute;
+  top: 50px; /* Ensures it appears below input */
+  left: 0;
+  width: 100%;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+  max-height: 200px;
+  overflow-y: auto;
+  display: block !important;
+  z-index: 9999;
+}
+
+/* Individual Autocomplete Items */
+.autocomplete-item {
+  padding: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  color: black;
+  background: white;
+  transition: background 0.3s;
+}
+
+/* Highlight when hovered */
+.autocomplete-item:hover {
+  background: #f0f0f0;
+}
+
+.market-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 350px;
+  margin: auto;
+}
+
+.market-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: top;
+  padding: 10px;
+  background: white;
+  border-left: 5px solid green;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.market-card.positive {
+  border-left: 5px solid green;
+}
+.market-card.negative {
+  border-left: 5px solid red;
+}
+
+.market-card:hover {
+  background: #f0f0f0;
+}
+
+.market-name {
+  font-size: 14px;
+  text-align: left;
+  width: 200px;
+}
+.stock-id {
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.market-price {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.market-change.positive {
+  color: green;
+}
+.market-change.negative {
+  color: red;
 }
